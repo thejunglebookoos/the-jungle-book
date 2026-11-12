@@ -1178,3 +1178,54 @@ async function syncProductsToFirebase() {
 }
 
 window.syncProductsToFirebase = syncProductsToFirebase;
+
+// ==========================================
+// LOAD PRODUCTS FROM FIREBASE CLOUD
+// ==========================================
+
+async function loadProductsFromFirebase() {
+
+    try {
+
+        const cloudProducts =
+            await window.getProductsFromFirebase();
+
+        if (cloudProducts && cloudProducts.length > 0) {
+
+            // UPDATE LOCAL PRODUCT DATABASE
+            products = cloudProducts;
+
+            // SAVE CLOUD DATA LOCALLY
+            saveProducts();
+
+            // REFRESH PRODUCT DISPLAY
+            displayProducts();
+
+            // REFRESH ADMIN PRODUCT LIST
+            if (
+                typeof displayAdminProducts === "function" &&
+                window.firebaseAuth.currentUser
+            ) {
+                displayAdminProducts();
+            }
+
+            console.log("Cloud Products Loaded Successfully!");
+
+        } else {
+
+            console.log("No Cloud Products Found.");
+
+        }
+
+    } catch (error) {
+
+        console.error("Cloud Product Loading Error:", error);
+
+    }
+}
+
+
+// LOAD CLOUD PRODUCTS AFTER PAGE LOAD
+document.addEventListener("DOMContentLoaded", function() {
+    loadProductsFromFirebase();
+});
