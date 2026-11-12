@@ -356,11 +356,31 @@
         <h3>📦 Manage Products</h3>
 
         <div id="admin-product-list"></div>
+      
+<!-- SALES REPORT -->
+
+<hr>
+
+<h3>📊 Sales Report</h3>
+
+<div id="sales-report">
+
+    <p>Total Orders: <strong id="total-orders">0</strong></p>
+
+    <p>Pending Orders: <strong id="pending-orders">0</strong></p>
+
+    <p>Delivered Orders: <strong id="delivered-orders">0</strong></p>
+
+    <p>Total Revenue: ₹<strong id="total-revenue">0</strong></p>
+
+</div>
+
       <hr>
 
 <h3>🛒 Customer Orders</h3>
 
-<button type="button" onclick="displayOrders()">
+<button type="button"
+    onclick="displayOrders(); loadSalesReport();">
     Refresh Orders
 </button>
 
