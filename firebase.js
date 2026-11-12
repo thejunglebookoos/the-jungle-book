@@ -16,6 +16,7 @@ import {
     doc,
     updateDoc,
     deleteDoc,
+  setDoc,
     serverTimestamp,
     query,
     orderBy
@@ -137,3 +138,39 @@ window.deleteFirebaseOrder = async function(id) {
 
 
 console.log("The Jungle Book Firebase Connected!");
+// ==========================================
+// CLOUD PRODUCT MANAGEMENT
+// ==========================================
+
+// GET ALL PRODUCTS FROM FIREBASE
+window.getProductsFromFirebase = async function() {
+    const snapshot = await getDocs(
+        collection(db, "products")
+    );
+
+    return snapshot.docs.map(function(item) {
+        return {
+            ...item.data(),
+            id: item.data().id || item.id
+        };
+    });
+};
+
+
+// SAVE OR UPDATE PRODUCT IN FIREBASE
+window.saveProductToFirebase = async function(product) {
+    return await setDoc(
+        doc(db, "products", String(product.id)),
+        product
+    );
+};
+
+
+// DELETE PRODUCT FROM FIREBASE
+window.deleteProductFromFirebase = async function(productId) {
+    return await deleteDoc(
+        doc(db, "products", String(productId))
+    );
+};
+
+console.log("Cloud Product Management Ready!");

@@ -1119,3 +1119,62 @@ async function displayOrders() {
 }
 
 window.displayOrders = displayOrders;
+
+// ==========================================
+// SYNC PRODUCTS TO FIREBASE CLOUD
+// ==========================================
+
+async function syncProductsToFirebase() {
+
+    const message = document.getElementById("sync-message");
+
+    try {
+
+        // CHECK ADMIN LOGIN
+        if (!window.firebaseAuth ||
+            !window.firebaseAuth.currentUser) {
+
+            message.innerText = "Please login as Admin first!";
+            return;
+        }
+
+        // CHECK PRODUCTS
+        if (!Array.isArray(products) || products.length === 0) {
+
+            message.innerText = "No products found!";
+            return;
+        }
+
+        message.innerText = "Uploading products to Cloud...";
+
+        // UPLOAD ALL PRODUCTS
+        for (let i = 0; i < products.length; i++) {
+
+            const product = products[i];
+
+            // CREATE ID IF MISSING
+            if (!product.id) {
+                product.id = Date.now() + i;
+            }
+
+            await window.saveProductToFirebase(product);
+        }
+
+        // SAVE LOCAL PRODUCTS
+        saveProducts();
+
+        message.innerText =
+            "Success! All products synced to Firebase Cloud.";
+
+        alert("All products synced successfully!");
+
+    } catch (error) {
+
+        message.innerText =
+            "Cloud Sync Failed: " + error.message;
+
+        console.error("Cloud Sync Error:", error);
+    }
+}
+
+window.syncProductsToFirebase = syncProductsToFirebase;
