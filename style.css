@@ -1,0 +1,572 @@
+
+/* =====================================
+   THE JUNGLE BOOK
+   COMPLETE WEBSITE DESIGN
+===================================== */
+
+
+/* 1. GLOBAL SETTINGS */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f8f2;
+    color: #333;
+    line-height: 1.6;
+}
+
+
+/* 2. HEADER */
+
+header {
+    background: #245b35;
+    color: white;
+    text-align: center;
+    padding: 25px 15px;
+}
+
+header h1 {
+    font-size: 30px;
+    letter-spacing: 2px;
+}
+
+header p {
+    font-size: 14px;
+    margin-top: 5px;
+    color: #e2f0df;
+}
+
+
+/* 3. NAVIGATION */
+
+nav {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    background: #ffffff;
+    color: #245b35;
+}
+
+
+/* 4. HERO SECTION */
+
+.hero {
+    min-height: 350px;
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.45),
+        rgba(0, 0, 0, 0.45)
+    ),
+    url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200");
+
+    background-size: cover;
+    background-position: center;
+
+    color: white;
+    text-align: center;
+
+    padding: 100px 20px;
+}
+
+.hero h2 {
+    font-size: 34px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 17px;
+    margin-bottom: 25px;
+}
+
+
+/* 5. COMMON BUTTON */
+
+.shop-button {
+    display: inline-block;
+    background: #e2a83b;
+    color: #222;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.shop-button:hover {
+    background: #f3c66c;
+    transform: translateY(-2px);
+}
+
+
+/* 6. SECTION COMMON STYLE */
+
+section {
+    padding: 45px 20px;
+}
+
+section h2 {
+    text-align: center;
+    color: #245b35;
+    font-size: 27px;
+    margin-bottom: 20px;
+}
+
+section > p {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+/* 7. CATEGORIES */
+
+.categories {
+    background: #edf4e9;
+    text-align: center;
+}
+
+.category-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    max-width: 1100px;
+    margin: 25px auto 0;
+}
+
+.category-card {
+    background: white;
+    padding: 30px 15px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.category-card h3 {
+    color: #245b35;
+    margin-bottom: 15px;
+}
+
+.category-card button {
+    background: #245b35;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+
+/* 8. PRODUCT SECTION */
+
+.products {
+    text-align: center;
+}
+
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+
+/* PRODUCT CARD */
+
+.product-card {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.product-card h3 {
+    font-size: 17px;
+    margin: 12px 0 5px;
+    color: #245b35;
+}
+
+.product-card p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.product-card button {
+    background: #245b35;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.product-card button:hover {
+    background: #367b4c;
+}
+
+
+/* 9. SEARCH BOX */
+
+.search-box {
+    max-width: 500px;
+    margin: 25px auto;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #b5cbb0;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: #245b35;
+}
+
+
+/* 10. CATEGORY FILTER BUTTONS */
+
+.category-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px auto;
+}
+
+.category-filters button {
+    background: #245b35;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.category-filters button:hover {
+    background: #367b4c;
+}
+
+
+/* 11. SORTING */
+
+.sort-box {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.sort-box label {
+    font-weight: bold;
+    color: #245b35;
+}
+
+.sort-box select {
+    padding: 10px;
+    border: 1px solid #b5cbb0;
+    border-radius: 7px;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+
+/* 12. SHOPPING CART */
+
+.cart {
+    background: #edf4e9;
+    text-align: center;
+}
+
+#cart-items {
+    max-width: 650px;
+    margin: 20px auto;
+}
+
+.cart-item {
+    background: white;
+    padding: 15px;
+    margin: 15px auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.cart-item h3 {
+    color: #245b35;
+    margin-bottom: 8px;
+}
+
+.cart-item p {
+    margin: 5px 0;
+}
+
+.cart-item button {
+    background: #b83232;
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+
+/* QUANTITY CONTROLS */
+
+.quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 12px 0;
+}
+
+.quantity-controls button {
+    background: #245b35;
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+
+/* CHECKOUT BUTTON */
+
+.checkout-button {
+    background: #168b45;
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.checkout-button:hover {
+    background: #106d35;
+}
+
+
+/* 13. ABOUT SECTION */
+
+.about {
+    background: white;
+    text-align: center;
+}
+
+.about p {
+    max-width: 750px;
+    margin: 12px auto;
+    line-height: 1.8;
+}
+
+
+/* 14. CONTACT SECTION */
+
+.contact {
+    background: #edf4e9;
+    text-align: center;
+}
+
+.contact p {
+    margin: 12px 0;
+}
+
+
+/* 15. ADMIN LOGIN AND DASHBOARD */
+
+.admin-login,
+.admin-panel {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 25px;
+    background: white;
+    border: 1px solid #c8dcc0;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.admin-login input {
+    width: 100%;
+    padding: 13px;
+    margin: 15px 0;
+    border: 1px solid #9ab493;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.admin-login button,
+.admin-panel button {
+    background: #245b35;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.admin-login button:hover,
+.admin-panel button:hover {
+    background: #367b4c;
+}
+
+#login-message {
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+
+/* 16. FOOTER */
+
+footer {
+    background: #183d25;
+    color: white;
+    text-align: center;
+    padding: 30px 15px;
+}
+
+footer h3 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+footer p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+
+/* 17. MOBILE RESPONSIVE DESIGN */
+
+@media (max-width: 768px) {
+
+    header h1 {
+        font-size: 23px;
+    }
+
+    nav {
+        gap: 5px;
+    }
+
+    nav a {
+        font-size: 13px;
+        padding: 7px 9px;
+    }
+
+    .hero {
+        padding: 75px 15px;
+        min-height: 300px;
+    }
+
+    .hero h2 {
+        font-size: 26px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .category-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .product-card {
+        padding: 10px;
+    }
+
+    .product-card img {
+        height: 140px;
+    }
+
+    .product-card h3 {
+        font-size: 15px;
+    }
+
+    .product-card p {
+        font-size: 16px;
+    }
+
+    section h2 {
+        font-size: 23px;
+    }
+
+    .admin-login,
+    .admin-panel {
+        margin: 25px 15px;
+    }
+}
+
+
+/* 18. SMALL MOBILE */
+
+@media (max-width: 400px) {
+
+    .product-container {
+        grid-template-columns: 1fr;
+    }
+
+    .category-container {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h2 {
+        font-size: 23px;
+    }
+
+    .sort-box select {
+        margin-top: 10px;
+        margin-left: 0;
+    }
+
+}
