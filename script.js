@@ -459,9 +459,12 @@ async function adminLogout() {
 window.adminLogout = adminLogout;
 
 
-// 15. ADD NEW PRODUCT
 
-function addNewProduct() {
+// ==========================================
+// 15. ADD NEW PRODUCT WITH FIREBASE CLOUD
+// ==========================================
+
+async function addNewProduct() {
 
     const name =
         document.getElementById("new-product-name").value.trim();
@@ -486,7 +489,14 @@ function addNewProduct() {
         return;
     }
 
-    products.push({
+    if (!window.firebaseAuth ||
+        !window.firebaseAuth.currentUser) {
+
+        alert("Please login as Admin first!");
+        return;
+    }
+
+    const newProduct = {
 
         id: Date.now(),
 
@@ -500,22 +510,44 @@ function addNewProduct() {
 
         stock: stock
 
-    });
+    };
 
-    saveProducts();
+    try {
 
-    displayProducts();
+        alert("Saving Product to Cloud...");
 
-    displayAdminProducts();
+        // SAVE TO FIREBASE FIRST
+        await window.saveProductToFirebase(newProduct);
 
-    document.getElementById("new-product-name").value = "";
-    document.getElementById("new-product-price").value = "";
-    document.getElementById("new-product-category").value = "";
-    document.getElementById("new-product-image").value = "";
-    document.getElementById("new-product-stock").value = "";
+        // SAVE LOCALLY
+        products.push(newProduct);
 
-    alert("Product Added Successfully!");
+        saveProducts();
+
+        displayProducts();
+
+        displayAdminProducts();
+
+        // CLEAR INPUTS
+        document.getElementById("new-product-name").value = "";
+        document.getElementById("new-product-price").value = "";
+        document.getElementById("new-product-category").value = "";
+        document.getElementById("new-product-image").value = "";
+        document.getElementById("new-product-stock").value = "";
+
+        alert("Product Added Successfully to Cloud!");
+
+    } catch (error) {
+
+        alert("Product Save Failed: " + error.message);
+
+        console.error(error);
+
+    }
+
 }
+
+window.addNewProduct = addNewProduct;
 
 
 // 16. DISPLAY ADMIN PRODUCTS
@@ -560,9 +592,12 @@ function displayAdminProducts() {
 }
 
 
-// 17. EDIT PRODUCT - ALL 5 FIELDS
 
-function editProduct(id) {
+// ==========================================
+// 17. EDIT PRODUCT - FIREBASE CLOUD SYNC
+// ==========================================
+
+async function editProduct(id) {
 
     const product = products.find(p => p.id === id);
 
@@ -622,46 +657,82 @@ function editProduct(id) {
         !Number.isInteger(stockValue) ||
         stockValue < 0
     ) {
-
         alert("Invalid details! Please try again.");
         return;
     }
 
-    product.name = newName.trim();
-    product.price = priceValue;
-    product.category = newCategory.trim();
-    product.image = newImage.trim();
-    product.stock = stockValue;
+    // PREPARE UPDATED PRODUCT
+    const updatedProduct = {
+        ...product,
+        name: newName.trim(),
+        price: priceValue,
+        category: newCategory.trim(),
+        image: newImage.trim(),
+        stock: stockValue
+    };
 
-    // Update matching cart item details
-    cart.forEach(item => {
-        if (item.id === id) {
-            item.name = product.name;
-            item.price = product.price;
+    // CHECK ADMIN LOGIN
+    if (
+        !window.firebaseAuth ||
+        !window.firebaseAuth.currentUser
+    ) {
+        alert("Please login as Admin first!");
+        return;
+    }
 
-            if (item.quantity > product.stock) {
-                item.quantity = product.stock;
+    try {
+
+        alert("Updating Product in Cloud...");
+
+        // SAVE TO FIREBASE FIRST
+        await window.saveProductToFirebase(updatedProduct);
+
+        // UPDATE LOCAL PRODUCT
+        Object.assign(product, updatedProduct);
+
+        // UPDATE MATCHING CART ITEMS
+        cart.forEach(item => {
+
+            if (item.id === id) {
+
+                item.name = product.name;
+                item.price = product.price;
+
+                if (item.quantity > product.stock) {
+                    item.quantity = product.stock;
+                }
             }
-        }
-    });
+        });
 
-    cart = cart.filter(item => item.quantity > 0);
+        cart = cart.filter(item => item.quantity > 0);
 
-    saveProducts();
+        saveProducts();
 
-    displayProducts();
+        displayProducts();
 
-    displayAdminProducts();
+        displayAdminProducts();
 
-    updateCart();
+        updateCart();
 
-    alert("Product Updated Successfully!");
+        alert("Product Updated Successfully in Cloud!");
+
+    } catch (error) {
+
+        alert("Product Update Failed: " + error.message);
+
+        console.error("Product Update Error:", error);
+    }
 }
 
+window.editProduct = editProduct;
 
-// 18. DELETE PRODUCT
 
-function deleteProduct(id) {
+
+// ==========================================
+// 18. DELETE PRODUCT - FIREBASE CLOUD SYNC
+// ==========================================
+
+async function deleteProduct(id) {
 
     const confirmDelete = confirm(
         "Are you sure you want to delete this product?"
@@ -669,20 +740,49 @@ function deleteProduct(id) {
 
     if (!confirmDelete) return;
 
-    products = products.filter(p => p.id !== id);
+    // CHECK ADMIN LOGIN
+    if (
+        !window.firebaseAuth ||
+        !window.firebaseAuth.currentUser
+    ) {
+        alert("Please login as Admin first!");
+        return;
+    }
 
-    cart = cart.filter(item => item.id !== id);
+    try {
 
-    saveProducts();
+        alert("Deleting Product from Cloud...");
 
-    displayProducts();
+        // DELETE FROM FIREBASE FIRST
+        await window.deleteProductFromFirebase(id);
 
-    displayAdminProducts();
+        // DELETE FROM LOCAL PRODUCTS
+        products = products.filter(p => p.id !== id);
 
-    updateCart();
+        // REMOVE FROM CART
+        cart = cart.filter(item => item.id !== id);
 
-    alert("Product Deleted Successfully!");
+        // SAVE LOCAL DATA
+        saveProducts();
+
+        // REFRESH WEBSITE
+        displayProducts();
+
+        displayAdminProducts();
+
+        updateCart();
+
+        alert("Product Deleted Successfully from Cloud!");
+
+    } catch (error) {
+
+        alert("Product Delete Failed: " + error.message);
+
+        console.error("Product Delete Error:", error);
+    }
 }
+
+window.deleteProduct = deleteProduct;
 
 
 // 19. MAKE FUNCTIONS AVAILABLE TO HTML
@@ -875,28 +975,55 @@ async function placeFirebaseOrder() {
             items: orderItems,
             total: total
         });
-// REDUCE PRODUCT STOCK
 
-cart.forEach(function(cartItem) {
+// ==========================================
+// REDUCE PRODUCT STOCK - FIREBASE CLOUD SYNC
+// ==========================================
 
-    const product = products.find(function(p) {
-        return p.id === cartItem.id ||
-               p.name === cartItem.name;
-    });
+async function reduceProductStockAndSync() {
 
-    if (product && typeof product.stock === "number") {
+    try {
 
-        product.stock = Math.max(
-            0,
-            product.stock - cartItem.quantity
+        // REDUCE LOCAL STOCK
+        for (const cartItem of cart) {
+
+            const product = products.find(function(p) {
+                return p.id === cartItem.id ||
+                       p.name === cartItem.name;
+            });
+
+            if (product && typeof product.stock === "number") {
+
+                product.stock = Math.max(
+                    0,
+                    product.stock - cartItem.quantity
+                );
+
+                // SAVE UPDATED STOCK TO FIREBASE
+                await window.saveProductToFirebase(product);
+            }
+        }
+
+        // SAVE LOCAL PRODUCTS
+        saveProducts();
+
+        // REFRESH PRODUCT DISPLAY
+        displayProducts();
+
+        console.log("Product Stock Synced to Firebase!");
+
+    } catch (error) {
+
+        console.error("Cloud Stock Sync Failed:", error);
+
+        alert(
+            "Order saved, but Cloud Stock Sync failed: " +
+            error.message
         );
-
     }
+}
 
-});
-
-saveProducts();
-displayProducts();
+await reduceProductStockAndSync();
 
 
 // CLEAR SHOPPING CART
